@@ -1,7 +1,17 @@
 package services
 
-import "rock/test_gin/domain/users"
+import (
+	"net/http"
+	"rock/test_gin/domain/users"
+	"rock/test_gin/utils/errors"
+)
 
-func CreateUser(user users.User) (*users.User, error) {
-	return &user, nil
+func CreateUser(user users.User) (*users.User, *errors.RestErr) {
+  return nil, nil
+	
+  return &user, nil
+
+	return &user, &errors.RestErr{
+		Status: http.StatusInternalServerError,
+	}
 }
