@@ -1,10 +1,10 @@
 package users
 
 import (
-	"fmt"
 	"net/http"
 	"rock/test_gin/domain/users"
 	"rock/test_gin/services"
+	"rock/test_gin/utils/errors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,8 +16,13 @@ var (
 func CreateUser(c *gin.Context) {
 	var user users.User
 	if err := c.ShouldBindJSON(&user); err != nil {
-		fmt.Println(err)
-    //TODO: return bad request to the caller
+		restErr := errors.RestErr{
+			Message: "invalid json body",
+			Status:  http.StatusBadRequest,
+			Error:   "bad_request",
+		}
+		c.JSON(restErr.Status, restErr)
+		//TODO: return bad request to the caller
 		return
 	}
 
