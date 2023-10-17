@@ -3,6 +3,7 @@ package users
 import (
 	"fmt"
 	"rock/test_gin/utils/errors"
+	"time"
 )
 
 var (
@@ -25,7 +26,7 @@ func (user *User) Get() *errors.RestErr {
 	return nil
 }
 
-func (user User) Save() *errors.RestErr {
+func (user *User) Save() *errors.RestErr {
 	current := usersDB[user.Id]
 	if current != nil {
 		if current.Email == user.Email {
@@ -34,6 +35,9 @@ func (user User) Save() *errors.RestErr {
 		return errors.NewBadRequestError(fmt.Sprintf("user %d already exists", user.Id))
 	}
 
-	usersDB[user.Id] = &user
+	now := time.Now().UTC()
+  user.DateCreated = now.Format("2006-01-02T03:04:05Z")
+
+	usersDB[user.Id] = user
 	return nil
 }
